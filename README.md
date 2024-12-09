@@ -174,3 +174,8 @@ Pomiary wykonaliśmy na danych generowanych przez LLM Llama3.2
 | GradientBoostingRegression | 0.9810845691255575   | 0.9484970913603092   | [0.92903047 0.94902349 0.93503578 0.73849326 0.9591626 ]      | 0.9021491210312274          |
 | LinearRegression           | 1.0                  | 1.0                  | [1. 1. 1. 1. 1.]                                              | 1.0                         |
 | Support Vector Regression  | -0.03229230044470932 | -0.02995514982548242 | [-0.02691651 -0.04337275 -0.02329514 -0.02977579 -0.03182853] | -0.03103774480132948        |
+    - Dla każdego dokumentu tworzony jest słownik tokenów z ich wartościami TF-IDF.
+8. Zapisanie tokenów do pliku JSON.
+
+
+

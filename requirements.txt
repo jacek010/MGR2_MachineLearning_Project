@@ -7,4 +7,3 @@ statsmodels
 nbformat
 scikit-learn
 json
-scikit-learn
