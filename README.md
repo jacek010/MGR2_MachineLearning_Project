@@ -245,3 +245,5 @@ Pomiary wykonaliśmy na danych generowanych przez LLM Llama3.2
 | LinearRegression | 1.0 | 1.0 | [1. 1. 1. 1. 1.] | 1.0 |
 | Support Vector Regression | -0.03229230044470932 | -0.02995514982548242 | [-0.02691651 -0.04337275 -0.02329514 -0.02977579 -0.03182853] | -0.03103774480132948 |
 
+
+

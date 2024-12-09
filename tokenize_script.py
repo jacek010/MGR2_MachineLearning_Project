@@ -103,12 +103,15 @@ if __name__ == '__main__':
     plt.show()
     exit()
     
+    # Fit and transform the text data
+    tfidf_vectorizer_vectors = tfidf_vectorizer.fit_transform(pred_col)
+    
     # Get the TF-IDF vector for the first document
     first_vector_tfidfvectorizer = tfidf_vectorizer_vectors[1] 
 
     # Create a DataFrame with TF-IDF values
     df = pd.DataFrame(first_vector_tfidfvectorizer.T.todense(), index=tfidf_vectorizer.get_feature_names_out(), columns=["tfidf"]) 
-    df = df.sort_values(by=["tfidf"])
+    df = df.sort_values(by=["tfidf"], ascending=False)
     
     print(f"HEAD: {df.head(50)}")
     
@@ -118,8 +121,9 @@ if __name__ == '__main__':
         row = {"index": i,
                "text": pred_col[i],
                "tokens": {
-                token: index_vector_tfidfvectorizer[0, tfidf_vectorizer.vocabulary_.get(token.lower(), 0)]
-                for token in pred_col[i].split()
+                token: index_vector_tfidfvectorizer[0, tfidf_vectorizer.vocabulary_[token.lower()]]
+                for token in sorted(pred_col[i].split(), key=lambda x: index_vector_tfidfvectorizer[0, tfidf_vectorizer.vocabulary_.get(x.lower(), 0)], reverse=True)
+                if token.lower() in tfidf_vectorizer.vocabulary_
             }
         }
         tokens.append(row)
