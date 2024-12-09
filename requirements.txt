@@ -2,3 +2,5 @@ openai
 pandas
 interpret
 dtreeviz
+scikit-learn
+json
