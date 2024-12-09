@@ -5,3 +5,5 @@ dtreeviz
 rulefit
 statsmodels
 nbformat
+scikit-learn
+json

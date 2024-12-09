@@ -32,3 +32,20 @@ Pracowac będziemy na danych lotów krajowych w USA z 2018 roku.
 ## Schemat
 ![Schemat projektu](./images/schemat_projektu.jpeg)
 
+
+## Tokenizacja
+Do tokenizacji używamy modelu `TFIDF`.
+
+### Proces tokenizacji
+1. Wczytanie danych z pliku CSV do DataFrame.
+2. Usunięcie wierszy z brakującymi wartościami.
+3. Inicjalizacja wektoryzatora TF-IDF.
+4. Dopasowanie i przekształcenie danych tekstowych za pomocą TF-IDF.
+5. Utworzenie DataFrame z wartościami TF-IDF dla pierwszego dokumentu.
+6. Sortowanie wartości TF-IDF w porządku malejącym.
+7. Generowanie tokenów dla każdego dokumentu:
+    - Dla każdego dokumentu tworzony jest słownik tokenów z ich wartościami TF-IDF.
+8. Zapisanie tokenów do pliku JSON.
+
+
+
