@@ -315,6 +315,12 @@ Pomiary wykonaliśmy na danych generowanych przez LLM Llama3.2
 Natęzenie koloru zalezne od opóznienia. 
 ![pca_of_tokens](images/pca_of_tokens.png)
 
+## Wykres wag tokenów
+![importance_of_tokens](images/importance_of_tokens.png)
+
+
+
+
 
 # Wyniki eksperymentów
 
