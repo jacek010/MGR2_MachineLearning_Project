@@ -72,6 +72,12 @@ Natęzenie koloru zalezne od opóznienia.
 ## Wykres wag tokenów
 
 ![importance_of_tokens](images/importance_of_tokens.png)
+## Wykres wag tokenów
+![importance_of_tokens](images/importance_of_tokens.png)
+
+
+
+
 
 # Wyniki eksperymentów
 
