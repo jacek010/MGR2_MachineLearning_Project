@@ -51,6 +51,12 @@ Do tokenizacji używamy modelu `TFIDF`.
 Natęzenie koloru zalezne od opóznienia. 
 ![pca_of_tokens](images/pca_of_tokens.png)
 
+## Wykres wag tokenów
+![importance_of_tokens](images/importance_of_tokens.png)
+
+
+
+
 
 # Wyniki eksperymentów
 
