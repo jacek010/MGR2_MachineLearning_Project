@@ -58,9 +58,9 @@ Do tokenizacji używamy modelu `TFIDF`.
    - Dla każdego dokumentu tworzony jest słownik tokenów z ich wartościami TF-IDF.
 8. Zapisanie tokenów do pliku JSON.
 
-## Rzuty PCA dla 
-natęzenie koloru zalezne od opoznienia
-zbadanie dzieki temu jaki token wpływa na opóznienie
+## Rzuty PCA
+Natęzenie koloru zalezne od opóznienia. 
+![pca_of_tokens](images/pca_of_tokens.png)
 
 sklearn RepeatedStratifiedKFold
 
