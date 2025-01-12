@@ -311,16 +311,10 @@ Pomiary wykonaliśmy na danych generowanych przez LLM Llama3.2
     - Dla każdego dokumentu tworzony jest słownik tokenów z ich wartościami TF-IDF.
 8. Zapisanie tokenów do pliku JSON.
 
-## Rzuty PCA dla 
-natęzenie koloru zalezne od opoznienia
-zbadanie dzieki temu jaki token wpływa na opóznienie
+## Rzuty PCA
+Natęzenie koloru zalezne od opóznienia. 
+![pca_of_tokens](images/pca_of_tokens.png)
 
-sklearn RepeatedStratifiedKFold
-
-### Bierzemy tokeny i budujemy z nich model biorąc jakiś klasyfiktor
-
-
-porównanie rzeczywistego delay i llm_generated_delay ( średni błąd )
 
 # Wyniki eksperymentów
 
