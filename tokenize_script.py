@@ -84,6 +84,23 @@ if __name__ == '__main__':
     
     # Plot token importance
     plot_token_importance(tfidf_vectorizer, tfidf_vectorizer_vectors, top_n=100)
+    pca = PCA(n_components=2)
+    y = LabelEncoder().fit_transform(delay_col)
+    x_ = pca.fit_transform(tfidf_vectorizer_vectors.toarray(), y)
+    x_ = x_[np.array(delay_col)>-100]
+    # a_max=np.argmax(pca.explained_variance_ratio_)
+    # print(f"a_max: {a_max}")
+    # print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
+    # print(tfidf_vectorizer.get_feature_names_out()[a_max])
+    # print(f"Noise variance: {pca.noise_variance_}")
+    # Plot PCA results
+    plt.figure(figsize=(16,10))
+    plt.scatter(x_[:, 0], x_[:, 1], c=np.array(delay_col)[np.array(delay_col)>-100], cmap='viridis', s=4)
+    plt.colorbar()
+    plt.xlabel('PCA One')
+    plt.ylabel('PCA Two')
+    plt.title('PCA of Tokens')
+    plt.show()
     exit()
     
     # Get the TF-IDF vector for the first document
@@ -91,7 +108,7 @@ if __name__ == '__main__':
 
     # Create a DataFrame with TF-IDF values
     df = pd.DataFrame(first_vector_tfidfvectorizer.T.todense(), index=tfidf_vectorizer.get_feature_names_out(), columns=["tfidf"]) 
-    df = df.sort_values(by=["tfidf"], ascending=False)
+    df = df.sort_values(by=["tfidf"])
     
     print(f"HEAD: {df.head(50)}")
     
@@ -101,9 +118,8 @@ if __name__ == '__main__':
         row = {"index": i,
                "text": pred_col[i],
                "tokens": {
-                token: index_vector_tfidfvectorizer[0, tfidf_vectorizer.vocabulary_[token.lower()]]
-                for token in sorted(pred_col[i].split(), key=lambda x: index_vector_tfidfvectorizer[0, tfidf_vectorizer.vocabulary_.get(x.lower(), 0)], reverse=True)
-                if token.lower() in tfidf_vectorizer.vocabulary_
+                token: index_vector_tfidfvectorizer[0, tfidf_vectorizer.vocabulary_.get(token.lower(), 0)]
+                for token in pred_col[i].split()
             }
         }
         tokens.append(row)
