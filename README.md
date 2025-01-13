@@ -71,6 +71,8 @@ Natęzenie koloru zalezne od opóznienia.
 
 ## Badanie wygenerowanych przez LLM predykcji opóźnienia lotu
 
+"Gołe" dane wyjściowe z modeli zostały poddane analizie na podstawie referencyjnego algorytmu zaproponowanego przez twórców zbioru danych. Predykcje LLMów `llama 3.2` oraz `gemma2` zostały za pomoca regresji liniowej poddane analizie cech kluczowych oraz zostały wyznaczone wartości R-squared oraz P-wartości dla cech.
+
 ### Kluczowe cechy
 
 Przeanalizowaliśmy kluczowe cechy zestawu danych. Im większa wartość, tym cecha ma bardziej pozytywny wpływ na wynik predykcji. Wartości ujemne wykazuja negatywny wpływ na jakość predykcji.
@@ -94,6 +96,13 @@ Przeanalizowaliśmy kluczowe cechy zestawu danych. Im większa wartość, tym ce
 | CRS_ELAPSED_TIME | -11.98     |
 
 Jak widać, wpływowość cech dla jednego i drugiego modelu jest zupełnie odwrotna. Zapewne wynika to z faktu, ze modele uzywaja innych slow w opisach uzasadniajacych predykowane przez nie opóźnienie.
+
+### R-squared
+
+| MODEL     | R^2   |
+| --------- | ----- |
+| Llama 3.2 | 0.283 |
+| Gemma2    | 0.370 |
 
 ### MSE i MAE
 
