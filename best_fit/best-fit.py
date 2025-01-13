@@ -100,13 +100,10 @@ df = df[df["OP_CARRIER"] == "WN"].drop(columns=["OP_CARRIER"])
 df
 
 # Break the flight date by month and day of the week
-# Considering the impact of weather and seasonal patterns on flight delays, it's important to capture the month and day of the week in our analysis. Executives have noted that weekends and winters tend to experience higher delays, highlighting the significance of these temporal factors. Hence, we'll create features to represent the month and day of the week in our dataset.
-
 # Flight date
 df.FL_DATE
 
 # Convert FL_DATE to datetime
-# Flight date and other date-related features are currently stored as object data types. To ensure proper handling and analysis, we will convert these features into datetime format.
 dt_time = pd.to_datetime(df.FL_DATE)
 dt_time
 
@@ -117,11 +114,6 @@ df = df.drop(columns=["FL_DATE"])
 df
 
 # Focus on the hub airports
-# 
-# It's crucial to identify if the arrival or departure airports are hub airports. Hub airports are responsible for more than 70% of air carrier traffic meaning that these airports are the main source of revenue and expenses.
-# 
-# Therefore we can simplify (and clarify) our analysis by encoding these hub airports with IATA codes and removing specific columns like FL_NUM, ORIGIN, and DEST.
-# 
 # Find the hub airports
 or_dest = (df["ORIGIN"].value_counts() + df["DEST"].value_counts()).sort_values(ascending=False)
 freq = np.cumsum(or_dest) / or_dest.sum()
@@ -148,6 +140,8 @@ for i, col in enumerate(df.drop(columns=["index", "CARRIER_DELAY"]).columns):
         plt.subplot(3, 4, i + 1)
         plt.scatter(df[col], df[target])
         plt.title(col)
+        print(f"Feature: {col}")
+        print(df[[col, target]].dropna().head())
     except ValueError:
         break
 
@@ -212,15 +206,14 @@ classification_models["random_forest"] = {"model": RandomForestClassifier()}
 classification_models["gradient_boosting"] = {"model": GradientBoostingClassifier()}
 
 # Fit all models and make predictions
-# 
-# **Regression**
+# Regression
 for model in regression_models.keys():
     regression_models[model]["model"] = regression_models[model]["model"].fit(X_train, y_train)
     y_pred = regression_models[model]["model"].predict(X_test)
     regression_models[model]["mse"] = MSE(y_test, y_pred)
     regression_models[model]["r2"] = R2(y_test, y_pred)
 
-# **Classification**
+# Classification
 for model in classification_models.keys():
     classification_models[model]["model"] = classification_models[model]["model"].fit(X_train, y_train_labels)
     y_pred = classification_models[model]["model"].predict(X_test)
@@ -228,28 +221,19 @@ for model in classification_models.keys():
     classification_models[model]["recall"] = recall_score(y_pred, y_test_labels)
     classification_models[model]["f1"] = f1_score(y_pred, y_test_labels)
 
-# ##### Visualize regression model metrics
+# Visualize regression model metrics
 regression_models = pd.DataFrame(regression_models)
 regression_models
 
 scores = regression_models.loc[["mse", "r2"]]
+print(scores)
 px.imshow(scores)
 
 # Visualize classification model metrics
 classification_models = pd.DataFrame(classification_models)
 scores = classification_models.loc[["precision", "recall", "f1"]]
+print(scores)
 px.imshow(scores)
-
-# Interopreting the models
-# 
-# Explaining Linear Regression
-# 
-# The method for finding optimal coefficients in linear regression, called Ordinary Least Squares (OLS), is well-studied and understood. Additionally, you can extract confidence intervals for each coefficient. The model's validity relies on several assumptions: linearity, normality, independence, lack of multicollinearity, and homoscedasticity.
-# 
-# - **Normality**: Each feature should be normally distributed. This can be tested with a Q-Q plot, histogram, or Kolmogorov-Smirnov test. Non-normality can be corrected with non-linear transformations.
-# - **Independence**: Observations (rows) should be independent, like unrelated events. This can be tested by checking for duplicate entries.
-# - **Lack of Multicollinearity**: Features should not be highly correlated with each other. This can be tested using a correlation matrix, tolerance measure, or Variance Inflation Factor (VIF) and addressed by removing correlated features.
-# - **Homoscedasticity**: Residuals should have constant variance across the regression line. This can be tested with the Goldfeld-Quandt test, and heteroscedasticity can be corrected with non-linear transformations.
 
 # Get the linear regression model
 linear_regression = regression_models["linear"]["model"]
@@ -267,16 +251,7 @@ print("Intercept:", linear_regression.intercept_)
 print("Feature Importance:")
 print(feature_importance_df)
 
-# Coefficients in a regression model act as weights, influencing the prediction of the target variable. Beyond their numerical value, coefficients also convey a narrative about the impact of different features on the outcome. However, this narrative can vary based on the nature of the features being considered.
-
-# Better Linear Regression
-# 
-# **Feature Importance**
-# 
-# Utilizing coefficients, we can determine the importance of features in a regression model. However, scikit-learn's linear regressor lacks the capability to output the standard error of coefficients, hindering feature ranking. To overcome this, we calculate the t-statistic by dividing coefficients by their corresponding standard errors. This t-statistic enables us to rank features based on their importance.
-
 from statsmodels.regression.linear_model import OLS
-
 import statsmodels.api as sm
 
 # Add a constant to the model (intercept)
@@ -289,8 +264,7 @@ ols_model = sm.OLS(y_train, X_train_ols).fit()
 ols_summary = ols_model.summary(xname=['const'] + list(df.drop(columns=[target]).columns))
 print(ols_summary)
 
-# Explaining Ridge Regression
-# Ridge regression belongs to a group of penalized regression techniques, along with LASSO and ElasticNet. It penalizes coefficients using the L2 norm, reducing the impact of irrelevant features and promoting sparsity in the model. This regularization helps filter out noise, leading to lower variance and better generalization performance by simplifying the model's complexity.
+# Ridge regression
 ridge_regression = regression_models["ridge"]["model"]
 ridge_feature_importance = np.std(X_train, 0) * ridge_regression.coef_
 
@@ -303,7 +277,7 @@ print("Ridge Regression Intercept:", ridge_regression.intercept_)
 print("Ridge Regression Feature Importance:")
 print(ridge_feature_importance_df)
 
-# Explaining Logistic Regression
+# Logistic Regression
 logistic_regression = classification_models["logistic"]["model"]
 logistic_feature_importance = np.std(X_train, 0) * logistic_regression.coef_[0]
 
@@ -316,9 +290,7 @@ print("Logistic Regression Intercept:", logistic_regression.intercept_)
 print("Logistic Regression Feature Importance:")
 print(logistic_feature_importance_df)
 
-# Explaining with KNN
-# KNN makes predictions by utilizing examples from the training dataset with highest similarity to input data and averaging their target values.\ This implies that for examples with highest dissimilarity to training distribution KNN will produce predictions with highest error.\ Therefore by predicting targets on training dataset and analyzing distances to nearest neighbors we can detect anomalies in our data.
-# 1. Use knn_model.kneighbors(X_train) to get distances and indexes of nearest neighbors
+# KNN
 knn_model = classification_models["knn"]["model"]
 distances, indices = knn_model.kneighbors(X_train)
 
@@ -333,6 +305,10 @@ plt.xlabel('Example Index')
 plt.ylabel('Average Neighbor Distance')
 plt.show()
 
+# Print the distances mean to the console
+print("Example-wise Average Neighbor Distance:")
+print(distances_mean)
+
 # Calculate anomaly threshold using mu + 3*sigma rule
 mu = distances_mean.mean()
 sigma = distances_mean.std()
@@ -344,17 +320,16 @@ anomaly_indices = np.where(distances_mean > thr)[0]
 # Select data for anomalies
 anomalies = pd.DataFrame(X_train[anomaly_indices], columns=df.drop(columns=[target]).columns)
 
+# Print anomalies to the console
+print("Anomalous Examples:")
+print(anomalies)
+
 # Plot histograms for each feature of these anomalies
 anomalies.hist(bins=30, figsize=(15, 10))
 plt.suptitle('Histograms of Anomalous Examples')
 plt.show()
 
-# Explaining decision trees
-# Decision trees have a long history of use, even before being formalized into algorithms. They are easy to understand, making them highly interpretable in their simplest form. However, in practice, many types of decision trees exist, and they can become less interpretable due to the use of ensemble methods (like boosting, bagging, and stacking) or techniques like PCA. Even standalone decision trees can become complex as they grow deeper. Despite their complexity, decision trees always provide valuable insights into your data and predictions, and they can be used for both regression and classification tasks.
-
-# Interpreting decision trees can be challenging, especially as they become deeper and more complex. While visual representations are helpful, they too can become cluttered and difficult to follow as the tree expands.
-
-# ##### Explaining Naive Bayes
+# Naive Bayes
 naive_model = classification_models["naive_bayes"]["model"]
 print(naive_model.theta_)
 
@@ -367,3 +342,7 @@ theta_df = pd.DataFrame({
 # Create a bar plot
 fig = px.bar(theta_df, x='Feature', y='Theta', title='Naive Bayes Theta Values')
 fig.show()
+
+# Print theta values to the console
+print("Naive Bayes Theta Values:")
+print(theta_df)
