@@ -84,45 +84,7 @@ if __name__ == '__main__':
     
     # Plot token importance
     plot_token_importance(tfidf_vectorizer, tfidf_vectorizer_vectors, top_n=100)
-    pca = PCA(n_components=2)
-    y = LabelEncoder().fit_transform(delay_col)
-    x_ = pca.fit_transform(tfidf_vectorizer_vectors.toarray(), y)
-    x_ = x_[np.array(delay_col)>-100]
-    # a_max=np.argmax(pca.explained_variance_ratio_)
-    # print(f"a_max: {a_max}")
-    # print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
-    # print(tfidf_vectorizer.get_feature_names_out()[a_max])
-    # print(f"Noise variance: {pca.noise_variance_}")
-    # Plot PCA results
-    plt.figure(figsize=(16,10))
-    plt.scatter(x_[:, 0], x_[:, 1], c=np.array(delay_col)[np.array(delay_col)>-100], cmap='viridis', s=4)
-    plt.colorbar()
-    plt.xlabel('PCA One')
-    plt.ylabel('PCA Two')
-    plt.title('PCA of Tokens')
-    plt.show()
-    exit()
-    
-    # Fit and transform the text data
-    tfidf_vectorizer_vectors = tfidf_vectorizer.fit_transform(pred_col)
-    
-    pca = PCA(n_components=2)
-    y = LabelEncoder().fit_transform(delay_col)
-    x_ = pca.fit_transform(tfidf_vectorizer_vectors.toarray(), y)
-    x_ = x_[np.array(delay_col)>-100]
-    # a_max=np.argmax(pca.explained_variance_ratio_)
-    # print(f"a_max: {a_max}")
-    # print(f"Explained variance ratio: {pca.explained_variance_ratio_}")
-    # print(tfidf_vectorizer.get_feature_names_out()[a_max])
-    # print(f"Noise variance: {pca.noise_variance_}")
-    # Plot PCA results
-    plt.figure(figsize=(16,10))
-    plt.scatter(x_[:, 0], x_[:, 1], c=np.array(delay_col)[np.array(delay_col)>-100], cmap='viridis', s=4)
-    plt.colorbar()
-    plt.xlabel('PCA One')
-    plt.ylabel('PCA Two')
-    plt.title('PCA of Tokens')
-    plt.show()
+
     exit()
     
     # Get the TF-IDF vector for the first document
