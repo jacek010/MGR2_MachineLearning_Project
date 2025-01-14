@@ -84,6 +84,7 @@ if __name__ == '__main__':
     
     # Plot token importance
     plot_token_importance(tfidf_vectorizer, tfidf_vectorizer_vectors, top_n=100)
+
     exit()
     
     # Get the TF-IDF vector for the first document
