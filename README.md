@@ -60,10 +60,13 @@ Do tokenizacji używamy modelu `TFIDF`.
 
 ## Rzuty PCA
 Natęzenie koloru zalezne od opóznienia. 
-![pca_of_tokens](images/pca_of_tokens.png)
+![pca_of_tokens_llama](images/pca_of_tokens_llama.png)
+![pca_of_tokens_gemma](images/pca_of_tokens_gemma.png)
 
 ## Wykres wag tokenów
-![importance_of_tokens](images/importance_of_tokens.png)
+![importance_of_tokens_llama](images/importance_of_tokens_llama.png)
+![importance_of_tokens_gemma](images/importance_of_tokens_gemma.png)
+
 
 # Wyniki eksperymentów
 
