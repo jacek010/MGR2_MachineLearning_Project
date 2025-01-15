@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 from sklearn.impute import SimpleImputer
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import GradientBoostingRegressor
+import scipy.stats
+from sklearn.preprocessing import LabelEncoder
 
 from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression
@@ -37,14 +39,25 @@ class ModelSelector:
 
 def extract_subdf(input_df: pd.DataFrame) -> pd.DataFrame:
     columns_to_exclude = ["ARR_DELAY", "Unnamed: 27", "llm_delay_minutes", "llm_delay_explain"]  # Replace with actual column names to exclude
-    subdf = input_df.drop(columns=columns_to_exclude)
+    columns_used_to_generate_llm = ["FL_DATE", "OP_CARRIER", "OP_CARRIER_FL_NUM", "ORIGIN", "DEST", "CRS_DEP_TIME", "DISTANCE", "CRS_ARR_TIME" ]
+    subdf = input_df[columns_used_to_generate_llm]
     
     # Remove non-numeric columns
-    numeric_cols = subdf.select_dtypes(include=[np.number]).columns
-    subdf = subdf[numeric_cols]
+    # numeric_cols = subdf.select_dtypes(include=[np.number]).columns
+    # subdf = subdf[numeric_cols]
+    
+    # Convert date column to numeric
+    subdf["FL_DATE"] = pd.to_datetime(subdf["FL_DATE"]).map(pd.Timestamp.toordinal)
+    
+     # Encode categorical columns
+    label_encoders = {}
+    for column in ["OP_CARRIER", "ORIGIN", "DEST"]:
+        le = LabelEncoder()
+        subdf[column] = le.fit_transform(subdf[column])
+        label_encoders[column] = le
     
     # Replace NaN values with the mean of the column
-    imputer = SimpleImputer(strategy='mean')
+    imputer = SimpleImputer(strategy='constant', fill_value=0)
     subdf = pd.DataFrame(imputer.fit_transform(subdf), columns=subdf.columns)
     
     return subdf
@@ -66,6 +79,8 @@ def sample(input_df: pd.DataFrame):
     cv_scores = cross_val_score(model, df, target, cv=5)
     print("Cross-validation scores:", cv_scores)
     print("Mean cross-validation score:", cv_scores.mean())
+    
+    return cv_scores
 
 def vectorized(input_df: pd.DataFrame):
     text_data = input_df["llm_delay_explain"]
@@ -88,6 +103,8 @@ def vectorized(input_df: pd.DataFrame):
     cv_scores = cross_val_score(model, X, target, cv=5)
     print("Cross-validation scores:", cv_scores)
     print("Mean cross-validation score:", cv_scores.mean())
+    
+    return cv_scores
 
 
 def count_mean_llm_delay_error(input_df: pd.DataFrame) -> dict:
@@ -175,11 +192,14 @@ if __name__ == '__main__':
     input_df = input_df.fillna(0)
     
     print(f'LLM model: {input_llm} | Regression model:{MODEL}')
-    sample(input_df)
-    vectorized(input_df)
+    sample_cv = sample(input_df)
+    vector_cv = vectorized(input_df)
     
     errors = count_mean_llm_delay_error(input_df)
     print(errors)
     
     percentage_stats = success_llm_predictions(input_df)
     print(percentage_stats)
+
+    ranksums = scipy.stats.ranksums(sample_cv, vector_cv)
+    print(ranksums)

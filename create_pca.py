@@ -24,19 +24,19 @@ if __name__ == '__main__':
     
     tokens_df = pd.DataFrame(tokens_list).fillna(0)
     
-    # Perform PCA
-    pca = PCA(n_components=2)
-    pca_result = pca.fit_transform(tokens_df)
+    # # Perform PCA
+    # pca = PCA(n_components=2)
+    # pca_result = pca.fit_transform(tokens_df)
     
-    # Add PCA results to the DataFrame
-    tokens_df['pca-one'] = pca_result[:, 0]
-    tokens_df['pca-two'] = pca_result[:, 1]
+    # # Add PCA results to the DataFrame
+    # tokens_df['pca-one'] = pca_result[:, 0]
+    # tokens_df['pca-two'] = pca_result[:, 1]
     
-    # Plot PCA results
-    plt.figure(figsize=(16,10))
-    plt.scatter(tokens_df['pca-one'], tokens_df['pca-two'], c=tokens_df.index, cmap='viridis')
-    plt.colorbar()
-    plt.xlabel('PCA One')
-    plt.ylabel('PCA Two')
-    plt.title('PCA of Tokens')
-    plt.show()
+    # # Plot PCA results
+    # plt.figure(figsize=(16,10))
+    # plt.scatter(tokens_df['pca-one'], tokens_df['pca-two'], c=tokens_df.index, cmap='viridis')
+    # plt.colorbar()
+    # plt.xlabel('PCA One')
+    # plt.ylabel('PCA Two')
+    # plt.title('PCA of Tokens')
+    # plt.show()
