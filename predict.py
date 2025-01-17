@@ -18,7 +18,7 @@ input_dir = 'llm_prepared_datasets'
 input_llm = 'llama3_2'
 input_file = f'{input_dir}/2018_llm_{input_llm}_3000_new_explains_export.csv'
 
-MODEL = 'SVR'
+MODEL = 'GradientBoostingRegressor'
 
 class ModelSelector:
     def __init__(self, model_name):
@@ -72,6 +72,7 @@ def sample(input_df: pd.DataFrame):
     model = ModelSelector(MODEL).get_model()
     model.fit(X_train, y_train)
 
+    print("\nSAMPLE DATA")
     print("Sample train score:", model.score(X_train, y_train))
     print("Sample test score:", model.score(X_test, y_test))
 
@@ -96,6 +97,7 @@ def vectorized(input_df: pd.DataFrame):
     model = ModelSelector(MODEL).get_model()
     model.fit(X_train, y_train)
 
+    print("\nVECTORIZED DATA")
     print("Vectorized train score:", model.score(X_train, y_train))
     print("Vectorized test score:", model.score(X_test, y_test))
 

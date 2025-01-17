@@ -68,6 +68,24 @@ Natęzenie koloru zalezne od opóznienia.
 ![importance_of_tokens_gemma](images/importance_of_tokens_gemma.png)
 
 
+## Badanie korelacji danych wykorzystanych do przewidywania opoznienia
+Policzona została korelacja danych, ale tylko kolumn, które otrzymał LLM do dokonania predykcji opóźnienia lotu.
+Im większy wskaznik na przecięciu, tym wysze powiązanie danych cech
+|                   | FL_DATE   | OP_CARRIER | OP_CARRIER_FL_NUM | ORIGIN    | DEST      | CRS_DEP_TIME | DISTANCE  | CRS_ARR_TIME |
+|-------------------|-----------|------------|-------------------|-----------|-----------|--------------|-----------|--------------|
+| FL_DATE           | 1.000000  | -0.005715  | 0.016215          | 0.005512  | -0.008630 | 0.024363     | 0.000053  | 0.023891     |
+| OP_CARRIER        | -0.005715 | 1.000000   | 0.344090          | 0.055766  | 0.064718  | 0.035060     | -0.146434 | 0.045334     |
+| OP_CARRIER_FL_NUM | 0.016215  | 0.344090   | 1.000000          | -0.032460 | -0.032958 | -0.002625    | -0.312443 | 0.016112     |
+| ORIGIN            | 0.005512  | 0.055766   | -0.032460         | 1.000000  | 0.025534  | -0.009982    | 0.099309  | 0.007244     |
+| DEST              | -0.008630 | 0.064718   | -0.032958         | 0.025534  | 1.000000  | 0.087233     | 0.075666  | 0.049175     |
+| CRS_DEP_TIME      | 0.024363  | 0.035060   | -0.002625         | -0.009982 | 0.087233  | 1.000000     | -0.036154 | 0.679424     |
+| DISTANCE          | 0.000053  | -0.146434  | -0.312443         | 0.099309  | 0.075666  | -0.036154    | 1.000000  | -0.021351    |
+| CRS_ARR_TIME      | 0.023891  | 0.045334   | 0.016112          | 0.007244  | 0.049175  | 0.679424     | -0.021351 | 1.000000     |
+
+Najsilniejszą korelację otrzymujemy przy rokładowym odlocie i przylocie, co jest dosy logiczne. 
+Gdyby pominą tą korelację, to kolejna najsilniejsza jest przy numerze lotu i odległości.
+
+
 # Wyniki eksperymentów
 
 ## Badanie wygenerowanych przez LLM predykcji opóźnienia lotu
@@ -165,8 +183,22 @@ Pomiary wykonaliśmy na danych generowanych przez LLM Llama3.2
 | Support Vector Regression  | -0.03229230044470932 | -0.02995514982548242 | [-0.02691651 -0.04337275 -0.02329514 -0.02977579 -0.03182853] | -0.03103774480132948        |
 
 
+## Porównanie wyników modeli po obcięciu danych dla klasycznego modelu
+Do kolejnego zestawu testów obcięliśmy dane wejściowe dla modelu klasycznego do takich samych, z jakich mógł korzystac LLM
+
+### GradientBoostingRegressor
+
+|Parameter| Raw data | Vectors from LLM |
+|-|-|-|
+|Train score | 0.538 | 0.699 |
+|Test score  | -0.109 | -0.175 |
+|Mean Cross-validation score | -0.542 | -0.103 |
 
 
 
 
 
+Model w obu przypadkach (SAMPLE oraz VECTORIZED) uzyskuje dodatni wynik na zbiorze treningowym, ale ujemny wynik (co oznacza R² ujemne) na zbiorze testowym. Świadczy to o przeuczeniu: model „uczy się” danych treningowych, ale nie generalizuje dobrze.
+Wyniki cross-validation również wskazują na ujemne lub niskie wartości R², co oznacza, że model ma trudności z dokładnym przewidywaniem w kolejnych próbkach. W przypadku danych tekstowych (VECTORIZED) wyniki cross-validation są bliżej zera (−0.10), więc mimo wszystko jest minimalnie lepiej niż w SAMPLE DATA.
+
+Test rangowy (Wilcoxona) zwrócił statystykę ~0.104 i wysokie p-value ~0.917. Oznacza to, że nie ma statystycznie istotnej różnicy między porównywanymi grupami (brak podstaw do odrzucenia hipotezy zerowej).
