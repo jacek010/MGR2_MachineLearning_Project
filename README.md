@@ -187,18 +187,60 @@ Pomiary wykonaliśmy na danych generowanych przez LLM Llama3.2
 Do kolejnego zestawu testów obcięliśmy dane wejściowe dla modelu klasycznego do takich samych, z jakich mógł korzystac LLM
 
 ### GradientBoostingRegressor
-
+#### Llama3.2
 |Parameter| Raw data | Vectors from LLM |
 |-|-|-|
 |Train score | 0.538 | 0.699 |
 |Test score  | -0.109 | -0.175 |
 |Mean Cross-validation score | -0.542 | -0.103 |
 
-
-
-
-
 Model w obu przypadkach (SAMPLE oraz VECTORIZED) uzyskuje dodatni wynik na zbiorze treningowym, ale ujemny wynik (co oznacza R² ujemne) na zbiorze testowym. Świadczy to o przeuczeniu: model „uczy się” danych treningowych, ale nie generalizuje dobrze.
 Wyniki cross-validation również wskazują na ujemne lub niskie wartości R², co oznacza, że model ma trudności z dokładnym przewidywaniem w kolejnych próbkach. W przypadku danych tekstowych (VECTORIZED) wyniki cross-validation są bliżej zera (−0.10), więc mimo wszystko jest minimalnie lepiej niż w SAMPLE DATA.
 
 Test rangowy (Wilcoxona) zwrócił statystykę ~0.104 i wysokie p-value ~0.917. Oznacza to, że nie ma statystycznie istotnej różnicy między porównywanymi grupami (brak podstaw do odrzucenia hipotezy zerowej).
+
+#### Gemma2
+|Parameter| Raw data | Vectors from LLM |
+|-|-|-|
+|Train score | 0.408 | 0.581 |
+|Test score  | -0.056 | -0.289 |
+|Mean Cross-validation score |-0.080 | -0.155 |
+
+Wilcoxon: 1.149
+
+P-value: 0.251
+
+### SVR
+|Parameter| Raw data | Vectors from LLM |
+|-|-|-|
+|Train score | -0.052 | -0.031 |
+|Test score  | -0.047 | -0.057 |
+|Mean Cross-validation score |-0.058 | -0.057 |
+
+Wilcoxon: -0.522
+
+P-value: 0.602
+
+
+### RandomForestRegression
+|Parameter| Raw data | Vectors from LLM |
+|-|-|-|
+|Train score | 0.857 | 0.826 |
+|Test score  | -0.148 | -0.115 |
+|Mean Cross-validation score | -0.292 | 0.179 |
+
+Wilcoxon: 0.522
+
+P-value: 0.602
+
+
+### Linear regression
+|Parameter| Raw data | Vectors from LLM |
+|-|-|-|
+|Train score | 0.013 | 0.999 |
+|Test score  | 0.005 | -69.266 |
+|Mean Cross-validation score | 0.003 | -1010.217 |
+
+Wilcoxon: 2.611
+
+P-value: 0.009

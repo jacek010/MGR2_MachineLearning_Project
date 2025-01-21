@@ -15,7 +15,7 @@ from sklearn.svm import SVR
 from sklearn.linear_model import LinearRegression
 
 input_dir = 'llm_prepared_datasets'
-input_llm = 'llama3_2'
+input_llm = 'gemma2'
 input_file = f'{input_dir}/2018_llm_{input_llm}_3000_new_explains_export.csv'
 
 MODEL = 'GradientBoostingRegressor'
