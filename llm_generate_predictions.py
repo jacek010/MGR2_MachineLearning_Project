@@ -4,7 +4,7 @@ import random as rd
 import json
 import time
 
-LLM_MODEL = 'gemma2'
+LLM_MODEL = 'deepseek-r1'
 
 PREDICT_ROWS = 3000
 

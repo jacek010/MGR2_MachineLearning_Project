@@ -9,10 +9,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 input_dir = 'llm_prepared_datasets'
-input_file = f'{input_dir}/2018_llm_gemma2_3000_new_explains_export.csv'
+input_file = f'{input_dir}/2018_llm_deepseek-r1_3000_new_explains_export.csv'
 
 tokens_dir = 'tokens'
-tokens_file = 'tokens_full.json'
+tokens_file = 'tokens_full_deepseek-r1.json'
 
 def save_to_json(data, filename):
     # Save data to a JSON file
@@ -41,7 +41,7 @@ def plot_pca(y_col, tfidf_vectorizer_vectors):
     plt.colorbar()
     plt.xlabel('PCA One')
     plt.ylabel('PCA Two')
-    plt.title('PCA of Tokens - Gemma2')
+    plt.title('PCA of Tokens - Deepseek-r1')
     plt.show()
 
 def plot_token_importance(tfidf_vectorizer, tfidf_vectors, top_n=20):
@@ -57,7 +57,7 @@ def plot_token_importance(tfidf_vectorizer, tfidf_vectors, top_n=20):
     # Plot the top N tokens
     plt.figure(figsize=(10, 6))
     token_importance.head(top_n).plot(kind='bar')
-    plt.title(f'Top {top_n} Important Tokens - Gemma2')
+    plt.title(f'Top {top_n} Important Tokens - Deepseek-r1')
     plt.xlabel('Tokens')
     plt.ylabel('Importance')
     plt.show()

@@ -6,8 +6,9 @@ from matplotlib import pyplot
 import pandas as pd
 import numpy as np
 
+llm = 'deepseek-r1'
 input_dir = 'llm_prepared_datasets'
-input_file = f'{input_dir}/2018_llm_gemma2_3000_new_explains_export.csv'
+input_file = f'{input_dir}/2018_llm_{llm}_3000_new_explains_export.csv'
 
 input_df = pd.read_csv(input_file).dropna(subset=["llm_delay_explain", "ARR_DELAY"])
 

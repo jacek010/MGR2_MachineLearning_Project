@@ -129,10 +129,11 @@ Obliczyliśmy średni błąd kwadratowy oraz średni bezwzględny błąd realneg
 
 Porównaliśmy dodatkowo te błędy z dwóch LLM'ow: Llama3.2 i Gemma2
 
-| MODEL     | Mean Squared Error (MSE) | Mean Absolute Error (MAE) |
-| --------- | ------------------------ | ------------------------- |
-| Llama 3.2 | 743223.039               | 254.332                   |
-| Gemma2    | 3873.443                 | 47.424                    |
+| MODEL      | Mean Squared Error (MSE) | Mean Absolute Error (MAE) |
+| ---------  | ------------------------ | ------------------------- |
+| Llama 3.2  | 743223.039               | 254.332                   |
+| Gemma2     | 3873.443                 | 47.424                    |
+| Deepseek-r1| 117430.78                | 68.948                    |
 
 ### Procentowa skutecznośc predykcji
 
@@ -142,19 +143,21 @@ Sprawdziliśmy dodatkowo na ile LLM jest w stanie chociaz zero-jedynkowo przewid
 
 Poprawna predykcja jest wtedy, kiedy znak wartości opóźnienia się zgadza. Optymistyczna jest wtedy kiedy wg LLM się nie spóźni, a w rzeczywistości się spóźnił. Pesymistyczna - na odwrót. Wartości ponizej podane są w procentach
 
-| MODEL     | Correct | Overly optymistic | Overly pessimistic |
-| --------- | ------- | ----------------- | ------------------ |
-| Llama 3.2 | 49.429  | 16.292            | 32.342             |
-| Gemma2    | 37.182  | 0.237             | 60.311             |
+| MODEL       | Correct | Overly optymistic | Overly pessimistic |
+| ---------   | ------- | ----------------- | ------------------ |
+| Llama 3.2   | 49.429  | 16.292            | 32.342             |
+| Gemma2      | 37.182  | 0.237             | 60.311             |
+| Deepseek-r1 | 22.551  | 0.79              | 35.19              |
 
 #### Poprawna predykcja wartości opóźnienia
 
 Policzyliśmy ile procentowo wartości predykowane odbiegały od rzeczywistych. Wartości ponizej podane są w procentach.
 
-| MODEL     | Perfect | Less than 5 min | Między 5 a 15 min | Między 15 a 30 min | Między 30 a 60 min | Między 60 a 120 min | Ponad 120 min |
-| --------- | ------- | --------------- | ----------------- | ------------------ | ------------------ | ------------------- | ------------- |
-| Llama 3.2 | 0.069   | 1.453           | 3.528             | 5.465              | 13.006             | 24.524              | 52.024        |
-| Gemma2    | 0.406   | 2.980           | 7.958             | 18.693             | 44.903             | 22.35               | 3.115         |
+| MODEL          | Perfect | Less than 5 min | Między 5 a 15 min | Między 15 a 30 min | Między 30 a 60 min | Między 60 a 120 min | Ponad 120 min |
+| ---------      | ------- | --------------- | ----------------- | ------------------ | ------------------ | ------------------- | ------------- |
+| Llama 3.2      | 0.069   | 1.453           | 3.528             | 5.465              | 13.006             | 24.524              | 52.024        |
+| Gemma2         | 0.406   | 2.980           | 7.958             | 18.693             | 44.903             | 22.35               | 3.115         |
+| Deepseek-r1    | 1.066   | 9.558           | 22.077            | 21.445             | 21.327             | 13.428              | 12.164        |
 
 ## Porównanie wyników modeli
 
@@ -209,6 +212,17 @@ Test rangowy (Wilcoxona) zwrócił statystykę ~0.104 i wysokie p-value ~0.917. 
 Wilcoxon: 1.149
 
 P-value: 0.251
+
+#### Deepseek-r1
+|Parameter| Raw data | Vectors from LLM |
+|-|-|-|
+|Train score | 0.376 | 0.542 |
+|Test score  | -0.053 | -0.148 |
+|Mean Cross-validation score |-0.043 | -0.152 |
+
+Wilcoxon: 1.984
+
+P-value: 0.047
 
 ### SVR
 |Parameter| Raw data | Vectors from LLM |
